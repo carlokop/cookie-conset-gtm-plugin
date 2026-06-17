@@ -1,7 +1,7 @@
 {
   "version": 1,
   "scannedAt": "2026-06-17T10:46:05.724Z",
-  "pageUrl": "https://www.tjingo.nl",
+  "pageUrl": "https://www.example.com",
   "items": [
     {
       "type": "cookie",
@@ -34,22 +34,6 @@
       "provider": "Crisp",
       "description": "",
       "retention": "6 months"
-    },
-    {
-      "type": "cookie",
-      "name": "cookiefirst-consent",
-      "category": "functional",
-      "provider": "CookieFirst",
-      "description": "",
-      "retention": "12 months"
-    },
-    {
-      "type": "cookie",
-      "name": "crisp-client/socket/*",
-      "category": "functional",
-      "provider": "Crisp",
-      "description": "",
-      "retention": "2 days"
     },
     {
       "type": "cookie",
@@ -120,22 +104,6 @@
       "name": "_gcl_ls",
       "category": "marketing",
       "provider": "Google Ads",
-      "description": "",
-      "retention": "Permanent (browser)"
-    },
-    {
-      "type": "storage",
-      "name": "cookiefirst-consent",
-      "category": "functional",
-      "provider": "CookieFirst",
-      "description": "",
-      "retention": "Permanent (browser)"
-    },
-    {
-      "type": "storage",
-      "name": "cookiefirst-id",
-      "category": "functional",
-      "provider": "CookieFirst",
       "description": "",
       "retention": "Permanent (browser)"
     },
@@ -281,14 +249,6 @@
       "src": "https://www.googletagmanager.com/gtag/js",
       "category": "analytics",
       "provider": "Google Tag Manager",
-      "description": ""
-    },
-    {
-      "type": "script",
-      "name": "consent.js",
-      "src": "https://consent.cookiefirst.com/sites/tjingo.nl-*/consent.js",
-      "category": "functional",
-      "provider": "CookieFirst",
       "description": ""
     },
     {
