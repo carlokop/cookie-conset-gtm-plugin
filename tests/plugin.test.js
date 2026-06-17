@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { init } from '../src/plugin.js';
-import { createConsentRecord } from '../src/consent-mode.js';
+import { createConsentRecord, mapConsentToGoogle } from '../src/consent-mode.js';
 import { writeConsentCookie } from '../src/cookie-storage.js';
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -11,11 +11,17 @@ describe('plugin init flow', () => {
     document.cookie = 'cp_cookie_consent=; Max-Age=0; Path=/';
     window.CookiePluginLoaded = false;
     window.dataLayer = [];
+    delete window.google_tag_data;
     window.CookiePluginConfig = {
       consentVersion: 1,
       cookieName: 'cp_cookie_consent',
     };
     vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    delete window.google_tag_data;
   });
 
   it('shows banner when no consent cookie exists', async () => {
@@ -37,11 +43,73 @@ describe('plugin init flow', () => {
     expect(window.CookiePlugin.getConsent()).toEqual(consent);
   });
 
-  it('pushes cp_consent_update and closes banner on accept all', async () => {
+  it('pushes cp_consent_update on page load when valid consent cookie exists', async () => {
+    vi.useFakeTimers();
+    const consent = createConsentRecord(true, false, 'custom', 1);
+    const consentMode = mapConsentToGoogle(consent);
+    writeConsentCookie('cp_cookie_consent', consent, 180);
+
     init();
-    await flushPromises();
+
+    expect(
+      window.dataLayer.find(
+        (entry) => typeof entry === 'object' && entry?.event === 'cp_consent_update'
+      )
+    ).toBeUndefined();
+
+    window.google_tag_data = {
+      ics: {
+        getConsentState(type) {
+          return consentMode[type] === 'granted' ? 1 : 0;
+        },
+        entries: Object.fromEntries(
+          Object.entries(consentMode).map(([key, value]) => [key, { update: value }])
+        ),
+      },
+    };
+    vi.advanceTimersByTime(20);
+
+    const updateEvent = window.dataLayer.find(
+      (entry) => typeof entry === 'object' && entry?.event === 'cp_consent_update'
+    );
+
+    expect(updateEvent).toMatchObject({
+      event: 'cp_consent_update',
+      consent: {
+        functional: true,
+        analytics: true,
+        marketing: false,
+      },
+    });
+    vi.useRealTimers();
+  });
+
+  it('pushes cp_consent_update and closes banner on accept all', async () => {
+    vi.useFakeTimers();
+    init();
+    await vi.runAllTimersAsync();
 
     document.querySelector('.cp-btn-accept')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+    expect(
+      window.dataLayer.find(
+        (entry) => typeof entry === 'object' && entry?.event === 'cp_consent_update'
+      )
+    ).toBeUndefined();
+
+    const consent = window.CookiePlugin.getConsent();
+    const consentMode = mapConsentToGoogle(consent);
+    window.google_tag_data = {
+      ics: {
+        getConsentState(type) {
+          return consentMode[type] === 'granted' ? 1 : 0;
+        },
+        entries: Object.fromEntries(
+          Object.entries(consentMode).map(([key, value]) => [key, { update: value }])
+        ),
+      },
+    };
+    vi.advanceTimersByTime(20);
 
     const updateEvent = window.dataLayer.find(
       (entry) => typeof entry === 'object' && entry?.event === 'cp_consent_update'
@@ -57,6 +125,7 @@ describe('plugin init flow', () => {
     });
     expect(document.querySelector('.cp-overlay')).toBeNull();
     expect(window.CookiePlugin.getConsent()?.source).toBe('accept_all');
+    vi.useRealTimers();
   });
 
   it('opens preferences view from customize button', async () => {

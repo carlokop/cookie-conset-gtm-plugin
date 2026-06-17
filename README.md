@@ -92,13 +92,33 @@ Bij cookies probeert de scan de **bewaartermijn** te bepalen via de Cookie Store
 
 ## Google Tag Manager
 
-### Optie A: Inventaris inline in GTM (geen server-upload)
+Alles in **één Custom HTML tag** — geen externe scripts of JSON-bestanden op je server.
 
-Plak de inhoud van je `cookie-inventory.json` direct in een GTM **Custom HTML** tag. Geen apart bestand op je server nodig.
+### Stappen
 
-1. Maak een **Custom HTML** tag in GTM
-2. Stel de trigger in op **Consent Initialization - All Pages**
-3. Gebruik dit template:
+1. Scan en bewerk je inventaris (`cookie-inventory.json`)
+2. Genereer de GTM-tag:
+
+```bash
+npm run build:gtm
+# of met eigen inventaris + privacy-URL:
+node scripts/build-gtm-tag.js pad/naar/cookie-inventory.json https://www.tjingo.nl/privacybeleid
+```
+
+3. Open `dist/gtm-consent-tag.html` en plak de **volledige inhoud** in een GTM **Custom HTML** tag
+4. Trigger: **Consent Initialization - All Pages**
+5. Publiceer GTM
+
+De gegenereerde tag bevat:
+
+- `window.CookiePluginConfig` met inventaris inline
+- De volledige plugin-code inline, getranspileerd naar **ES5** (vereist voor GTM Custom HTML)
+
+GTM ondersteunt geen ES2015+-syntax (geen arrow functions, `let`, template literals). Daarom draait `build:gtm` de bundle via Babel naar ES5.
+
+**Workflow bij cookie-wijzigingen:** scan → bewerk JSON → `npm run build:gtm` → opnieuw plakken in GTM → publiceer.
+
+### Handmatig template (zonder build-script)
 
 ```html
 <script>
@@ -107,60 +127,16 @@ Plak de inhoud van je `cookie-inventory.json` direct in een GTM **Custom HTML** 
     privacyPolicyUrl: '/privacybeleid',
     cookieInventory: {
       version: 1,
-      items: [
-        {
-          type: 'cookie',
-          name: '_ga',
-          category: 'analytics',
-          provider: 'Google Analytics',
-          description: 'Registreert bezoekstatistieken.'
-        },
-        {
-          type: 'cookie',
-          name: '_fbp',
-          category: 'marketing',
-          provider: 'Meta',
-          description: ''
-        }
-      ]
+      items: [ /* ... */ ]
     }
   };
 </script>
-<script src="https://jouwdomein.nl/cookie-consent.min.js"></script>
+<script>
+  /* plak hier de inhoud van dist/cookie-consent.min.js */
+</script>
 ```
 
-**Workflow bij cookie-wijzigingen:** scan → bewerk JSON → plak bijgewerkte `items` in GTM → publiceer GTM.
-
-**Tip:** gebruik een GTM **Custom JavaScript-variabele** voor de inventaris als je die op meerdere plekken nodig hebt:
-
-```js
-function() {
-  return {
-    version: 1,
-    items: [ /* ... */ ]
-  };
-}
-```
-
-En in je tag: `cookieInventory: {{Cookie Inventory Variable}}`
-
-Inline config (`cookieInventory`) heeft voorrang boven `cookieInventoryUrl`.
-
-### Optie B: Inventaris via URL (server)
-
-1. Host `dist/cookie-consent.min.js` en `cookie-inventory.json` op je domein
-2. Maak een **Custom HTML** tag in GTM
-3. Stel de trigger in op **Consent Initialization - All Pages**
-
-```html
-<script
-  src="https://jouwdomein.nl/cookie-consent.min.js"
-  data-privacy-policy-url="/privacybeleid"
-  data-cookie-inventory="/cookie-inventory.json"
-></script>
-```
-
-Bij cookie-wijzigingen hoef je GTM niet aan te passen — alleen het JSON-bestand op de server.
+`CookiePluginConfig` moet **vóór** de plugin-code staan.
 
 ## DataLayer event
 

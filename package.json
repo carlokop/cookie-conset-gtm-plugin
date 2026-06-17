@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.js",
+    "build:gtm": "node scripts/build.js && node scripts/build-gtm-bridge.js && node scripts/build-gtm-template.js && node scripts/build-gtm-tag.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "dev": "node scripts/build.js --watch"
   },
   "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.1",
     "esbuild": "^0.25.0",
     "jsdom": "^26.0.0",
     "vitest": "^3.0.0"

@@ -1,37 +1,74 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mergeConfig } from '../src/config.js';
-import { applyConsentUpdate } from '../src/consent-mode.js';
-import { createConsentRecord } from '../src/consent-mode.js';
+import { mapConsentToGoogle, createConsentRecord } from '../src/consent-mode.js';
+import { applyConsentUpdateAndWait } from '../src/consent-api.js';
+
+/**
+ * @param {import('../src/consent-mode.js').GoogleConsentMode} consentMode
+ */
+function mockGtmConsentState(consentMode) {
+  window.google_tag_data = {
+    ics: {
+      getConsentState(type) {
+        const value = consentMode[type];
+        if (value === 'granted') {
+          return 1;
+        }
+        if (value === 'denied') {
+          return 0;
+        }
+        return undefined;
+      },
+      entries: Object.fromEntries(
+        Object.entries(consentMode).map(([key, value]) => [key, { update: value }])
+      ),
+    },
+  };
+}
 
 describe('gtm dataLayer integration', () => {
-  /** @type {Array<unknown>} */
-  let dataLayer;
   /** @type {ReturnType<typeof vi.fn>} */
   let gtag;
 
   beforeEach(() => {
-    dataLayer = [];
+    vi.useFakeTimers();
+    window.dataLayer = [];
     gtag = vi.fn((...args) => {
-      dataLayer.push(args);
+      const callback = args[args.length - 1];
+      if (typeof callback === 'function') {
+        setTimeout(callback, 20);
+      }
     });
+    delete window.google_tag_data;
   });
 
-  it('pushes cp_consent_update after consent update', () => {
+  it('pushes cp_consent_update only after consent API confirms', () => {
     const consent = createConsentRecord(true, false, 'custom', 1);
-    const consentMode = applyConsentUpdate(gtag, consent);
+    const consentMode = mapConsentToGoogle(consent);
 
-    dataLayer.push({
-      event: 'cp_consent_update',
-      consent: {
-        functional: consent.functional,
-        analytics: consent.analytics,
-        marketing: consent.marketing,
-      },
-      consentMode,
+    applyConsentUpdateAndWait(gtag, consentMode, (appliedMode) => {
+      window.dataLayer.push({
+        event: 'cp_consent_update',
+        consent: {
+          functional: consent.functional,
+          analytics: consent.analytics,
+          marketing: consent.marketing,
+        },
+        consentMode: appliedMode,
+      });
     });
 
-    expect(gtag).toHaveBeenCalledWith('consent', 'update', consentMode);
-    expect(dataLayer).toContainEqual({
+    expect(window.dataLayer).toContainEqual(['consent', 'update', consentMode]);
+    expect(
+      window.dataLayer.find(
+        (entry) => typeof entry === 'object' && entry?.event === 'cp_consent_update'
+      )
+    ).toBeUndefined();
+
+    mockGtmConsentState(consentMode);
+    vi.advanceTimersByTime(20);
+
+    expect(window.dataLayer).toContainEqual({
       event: 'cp_consent_update',
       consent: {
         functional: true,

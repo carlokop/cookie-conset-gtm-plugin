@@ -57,19 +57,28 @@ export function mapConsentToGoogle(consent) {
 
 /**
  * @param {Function} gtag
+ * @param {number} [waitForUpdateMs]
  */
-export function applyDefaultConsent(gtag) {
-  gtag('consent', 'default', { ...DEFAULT_CONSENT_MODE });
+export function applyDefaultConsent(gtag, waitForUpdateMs = 500) {
+  gtag('consent', 'default', {
+    ...DEFAULT_CONSENT_MODE,
+    wait_for_update: waitForUpdateMs,
+  });
 }
 
 /**
  * @param {Function} gtag
  * @param {ConsentRecord} consent
+ * @param {(consentMode: GoogleConsentMode) => void} [onApplied]
  * @returns {GoogleConsentMode}
  */
-export function applyConsentUpdate(gtag, consent) {
+export function applyConsentUpdate(gtag, consent, onApplied) {
   const consentMode = mapConsentToGoogle(consent);
-  gtag('consent', 'update', consentMode);
+  if (onApplied) {
+    gtag('consent', 'update', consentMode, () => onApplied(consentMode));
+  } else {
+    gtag('consent', 'update', consentMode);
+  }
   return consentMode;
 }
 

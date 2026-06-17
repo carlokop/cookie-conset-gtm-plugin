@@ -1,11 +1,17 @@
 import { mergeConfig } from './config.js';
 import { readScriptConfig } from './script-config.js';
 import { readConsentCookie, writeConsentCookie, isConsentValid } from './cookie-storage.js';
+import { applyConsentUpdateAndWait } from './consent-api.js';
 import {
   applyDefaultConsent,
-  applyConsentUpdate,
   createConsentRecord,
+  mapConsentToGoogle,
 } from './consent-mode.js';
+import {
+  installGtmBridge,
+  isGtmConsentActive,
+  notifyGtmConsentListeners,
+} from './gtm-bridge.js';
 import { resolveInventory } from './inventory.js';
 import { renderConsentUI } from './ui.js';
 
@@ -25,6 +31,7 @@ export function init(userConfig) {
   window.CookiePluginLoaded = true;
 
   window.dataLayer = window.dataLayer || [];
+  installGtmBridge();
   window.gtag =
     window.gtag ||
     function gtag() {
@@ -37,7 +44,9 @@ export function init(userConfig) {
     ...(userConfig || {}),
   });
 
-  applyDefaultConsent(window.gtag);
+  if (!isGtmConsentActive()) {
+    applyDefaultConsent(window.gtag, config.consentWaitForUpdateMs);
+  }
 
   startPlugin(config);
 }
@@ -45,11 +54,43 @@ export function init(userConfig) {
 /**
  * @param {import('./config.js').DEFAULT_CONFIG} config
  */
+/**
+ * @param {import('./consent-mode.js').ConsentRecord} consent
+ */
+function pushConsentUpdateEvent(consent, consentMode) {
+  window.dataLayer.push({
+    event: 'cp_consent_update',
+    consent: {
+      functional: consent.functional,
+      analytics: consent.analytics,
+      marketing: consent.marketing,
+    },
+    consentMode,
+  });
+}
+
+/**
+ * @param {import('./consent-mode.js').ConsentRecord} consent
+ */
+function applyConsentAndNotify(consent) {
+  if (isGtmConsentActive()) {
+    notifyGtmConsentListeners(consent);
+    return;
+  }
+
+  const consentMode = mapConsentToGoogle(consent);
+  applyConsentUpdateAndWait(window.gtag, consentMode, () => {
+    pushConsentUpdateEvent(consent, consentMode);
+  });
+}
+
 async function startPlugin(config) {
   const savedConsent = readConsentCookie(config.cookieName);
 
   if (isConsentValid(savedConsent, config.consentVersion)) {
-    applyConsentUpdate(window.gtag, savedConsent);
+    if (!isGtmConsentActive()) {
+      applyConsentAndNotify(savedConsent);
+    }
     exposeApi(config, savedConsent);
     return;
   }
@@ -67,19 +108,7 @@ async function startPlugin(config) {
     );
 
     writeConsentCookie(config.cookieName, consent, config.cookieMaxAgeDays);
-
-    const consentMode = applyConsentUpdate(window.gtag, consent);
-
-    window.dataLayer.push({
-      event: 'cp_consent_update',
-      consent: {
-        functional: consent.functional,
-        analytics: consent.analytics,
-        marketing: consent.marketing,
-      },
-      consentMode,
-    });
-
+    applyConsentAndNotify(consent);
     exposeApi(config, consent);
 
     if (uiInstance) {

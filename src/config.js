@@ -2,6 +2,7 @@ export const DEFAULT_CONFIG = {
   consentVersion: 1,
   cookieName: 'cp_cookie_consent',
   cookieMaxAgeDays: 180,
+  consentWaitForUpdateMs: 500,
   privacyPolicyUrl: '',
   cookieInventoryUrl: '',
   showUnclassified: true,

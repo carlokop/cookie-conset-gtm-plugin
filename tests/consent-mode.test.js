@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   mapConsentToGoogle,
   createConsentRecord,
   DEFAULT_CONSENT_MODE,
+  applyDefaultConsent,
 } from '../src/consent-mode.js';
 
 describe('consent-mode', () => {
@@ -74,6 +75,19 @@ describe('consent-mode', () => {
       expect(DEFAULT_CONSENT_MODE.ad_storage).toBe('denied');
       expect(DEFAULT_CONSENT_MODE.functionality_storage).toBe('granted');
       expect(DEFAULT_CONSENT_MODE.security_storage).toBe('granted');
+    });
+  });
+
+  describe('applyDefaultConsent', () => {
+    it('sets wait_for_update on default consent', () => {
+      const gtag = vi.fn();
+
+      applyDefaultConsent(gtag, 500);
+
+      expect(gtag).toHaveBeenCalledWith('consent', 'default', {
+        ...DEFAULT_CONSENT_MODE,
+        wait_for_update: 500,
+      });
     });
   });
 });
