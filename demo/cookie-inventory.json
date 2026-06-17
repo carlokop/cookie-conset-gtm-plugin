@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "scannedAt": "2026-06-17T10:00:00.000Z",
+  "pageUrl": "https://example.com/",
+  "items": [
+    {
+      "type": "cookie",
+      "name": "cp_cookie_consent",
+      "category": "functional",
+      "provider": "Cookie Plugin",
+      "description": "Slaat uw cookievoorkeuren op."
+    },
+    {
+      "type": "cookie",
+      "name": "_ga",
+      "category": "analytics",
+      "provider": "Google Analytics",
+      "description": "Registreert een unieke ID om bezoekstatistieken bij te houden."
+    },
+    {
+      "type": "script",
+      "name": "gtm.js",
+      "src": "https://www.googletagmanager.com/gtm.js?id=GTM-XXXX",
+      "category": "analytics",
+      "provider": "Google Tag Manager",
+      "description": ""
+    },
+    {
+      "type": "cookie",
+      "name": "_fbp",
+      "category": "marketing",
+      "provider": "Meta",
+      "description": "Gebruikt door Meta voor advertentiedoeleinden."
+    }
+  ]
+}

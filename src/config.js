@@ -3,6 +3,8 @@ export const DEFAULT_CONFIG = {
   cookieName: 'cp_cookie_consent',
   cookieMaxAgeDays: 180,
   privacyPolicyUrl: '',
+  cookieInventoryUrl: '',
+  showUnclassified: true,
   texts: {
     title: 'Deze website gebruikt cookies',
     description:
@@ -38,6 +40,15 @@ export const DEFAULT_CONFIG = {
         description:
           'Marketingcookies worden gebruikt om bezoekers te volgen wanneer ze verschillende websites bezoeken. Het doel is advertenties weer te geven die relevant en aantrekkelijk zijn voor de individuele gebruiker.',
       },
+      unclassified: {
+        title: 'Niet geclassificeerd',
+        description:
+          'Deze cookies of scripts zijn nog niet ingedeeld in een categorie.',
+      },
+    },
+    inventory: {
+      providerLabel: 'Aanbieder',
+      noItems: 'Geen items gevonden in de inventaris.',
     },
   },
 };
@@ -72,6 +83,14 @@ export function mergeConfig(userConfig = {}) {
           ...DEFAULT_CONFIG.texts.categories.marketing,
           ...(userConfig.texts?.categories?.marketing || {}),
         },
+        unclassified: {
+          ...DEFAULT_CONFIG.texts.categories.unclassified,
+          ...(userConfig.texts?.categories?.unclassified || {}),
+        },
+      },
+      inventory: {
+        ...DEFAULT_CONFIG.texts.inventory,
+        ...(userConfig.texts?.inventory || {}),
       },
     },
   };

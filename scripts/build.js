@@ -4,24 +4,38 @@ import { dirname } from 'node:path';
 
 const watch = process.argv.includes('--watch');
 
-const buildOptions = {
-  entryPoints: ['src/index.js'],
-  outfile: 'dist/cookie-consent.min.js',
+const builds = [
+  {
+    entryPoints: ['src/index.js'],
+    outfile: 'dist/cookie-consent.min.js',
+    globalName: 'CookieConsentPlugin',
+  },
+  {
+    entryPoints: ['src/scan/index.js'],
+    outfile: 'dist/cookie-scanner.min.js',
+    globalName: 'CookieScanner',
+  },
+];
+
+const sharedOptions = {
   bundle: true,
   minify: true,
   format: 'iife',
-  globalName: 'CookieConsentPlugin',
   target: ['es2018'],
   legalComments: 'none',
 };
 
-mkdirSync(dirname(buildOptions.outfile), { recursive: true });
+mkdirSync('dist', { recursive: true });
 
 if (watch) {
-  const context = await esbuild.context(buildOptions);
-  await context.watch();
+  const contexts = await Promise.all(
+    builds.map((build) => esbuild.context({ ...sharedOptions, ...build }))
+  );
+  await Promise.all(contexts.map((context) => context.watch()));
   console.log('Watching for changes...');
 } else {
-  await esbuild.build(buildOptions);
-  console.log('Built dist/cookie-consent.min.js');
+  await Promise.all(builds.map((build) => esbuild.build({ ...sharedOptions, ...build })));
+  for (const build of builds) {
+    console.log(`Built ${build.outfile}`);
+  }
 }

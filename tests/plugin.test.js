@@ -1,7 +1,9 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { init } from '../src/plugin.js';
 import { createConsentRecord } from '../src/consent-mode.js';
 import { writeConsentCookie } from '../src/cookie-storage.js';
+
+const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 describe('plugin init flow', () => {
   beforeEach(() => {
@@ -13,27 +15,31 @@ describe('plugin init flow', () => {
       consentVersion: 1,
       cookieName: 'cp_cookie_consent',
     };
+    vi.restoreAllMocks();
   });
 
-  it('shows banner when no consent cookie exists', () => {
+  it('shows banner when no consent cookie exists', async () => {
     init();
+    await flushPromises();
 
     expect(document.querySelector('.cp-overlay')).not.toBeNull();
     expect(document.querySelector('[data-panel="consent"]')).not.toBeNull();
   });
 
-  it('does not show banner when valid consent cookie exists', () => {
+  it('does not show banner when valid consent cookie exists', async () => {
     const consent = createConsentRecord(true, true, 'accept_all', 1);
     writeConsentCookie('cp_cookie_consent', consent, 180);
 
     init();
+    await flushPromises();
 
     expect(document.querySelector('.cp-overlay')).toBeNull();
     expect(window.CookiePlugin.getConsent()).toEqual(consent);
   });
 
-  it('pushes cp_consent_update and closes banner on accept all', () => {
+  it('pushes cp_consent_update and closes banner on accept all', async () => {
     init();
+    await flushPromises();
 
     document.querySelector('.cp-btn-accept')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
@@ -53,8 +59,9 @@ describe('plugin init flow', () => {
     expect(window.CookiePlugin.getConsent()?.source).toBe('accept_all');
   });
 
-  it('opens preferences view from customize button', () => {
+  it('opens preferences view from customize button', async () => {
     init();
+    await flushPromises();
 
     document.querySelector('.cp-btn-middle')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
@@ -62,17 +69,48 @@ describe('plugin init flow', () => {
     expect(document.querySelector('[data-panel="consent"]')?.classList.contains('cp-hidden')).toBe(true);
   });
 
-  it('shows privacy policy link when privacyPolicyUrl is configured', () => {
+  it('shows privacy policy link when privacyPolicyUrl is configured', async () => {
     init({ privacyPolicyUrl: 'https://example.com/privacy' });
+    await flushPromises();
 
     const privacyLink = document.querySelector('.cp-link');
     expect(privacyLink).not.toBeNull();
     expect(privacyLink?.getAttribute('href')).toBe('https://example.com/privacy');
   });
 
-  it('hides privacy policy link when privacyPolicyUrl is not configured', () => {
+  it('hides privacy policy link when privacyPolicyUrl is not configured', async () => {
     init();
+    await flushPromises();
 
     expect(document.querySelector('.cp-link')).toBeNull();
+  });
+
+  it('shows inventory items in details tab when inventory is loaded', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          version: 1,
+          items: [
+            {
+              type: 'cookie',
+              name: '_ga',
+              category: 'analytics',
+              provider: 'Google Analytics',
+              description: 'Statistieken',
+            },
+          ],
+        }),
+      })
+    );
+
+    init({ cookieInventoryUrl: '/cookie-inventory.json' });
+    await flushPromises();
+
+    document.querySelector('.cp-btn-middle')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+    expect(document.querySelector('.cp-category-badge')?.textContent).toBe('1');
+    expect(document.querySelector('.cp-inventory-item-name')?.textContent).toBe('_ga');
   });
 });

@@ -6,6 +6,7 @@ import {
   applyConsentUpdate,
   createConsentRecord,
 } from './consent-mode.js';
+import { loadInventory } from './inventory.js';
 import { renderConsentUI } from './ui.js';
 
 const GLOBAL_KEY = 'CookiePlugin';
@@ -38,6 +39,13 @@ export function init(userConfig) {
 
   applyDefaultConsent(window.gtag);
 
+  startPlugin(config);
+}
+
+/**
+ * @param {import('./config.js').DEFAULT_CONFIG} config
+ */
+async function startPlugin(config) {
   const savedConsent = readConsentCookie(config.cookieName);
 
   if (isConsentValid(savedConsent, config.consentVersion)) {
@@ -45,6 +53,10 @@ export function init(userConfig) {
     exposeApi(config, savedConsent);
     return;
   }
+
+  const inventory = config.cookieInventoryUrl
+    ? await loadInventory(config.cookieInventoryUrl)
+    : null;
 
   let uiInstance = null;
 
@@ -78,24 +90,23 @@ export function init(userConfig) {
     }
   }
 
-  uiInstance = renderConsentUI(config, {
-    onAcceptAll: () => saveAndUpdate(true, true, 'accept_all'),
-    onRejectAll: () => saveAndUpdate(false, false, 'reject_all'),
-    onSavePreferences: (preferences) =>
-      saveAndUpdate(preferences.analytics, preferences.marketing, 'custom'),
-  });
+  function createUi() {
+    return renderConsentUI(config, inventory, {
+      onAcceptAll: () => saveAndUpdate(true, true, 'accept_all'),
+      onRejectAll: () => saveAndUpdate(false, false, 'reject_all'),
+      onSavePreferences: (preferences) =>
+        saveAndUpdate(preferences.analytics, preferences.marketing, 'custom'),
+    });
+  }
+
+  uiInstance = createUi();
 
   exposeApi(config, null, {
     openPreferences: () => {
       if (uiInstance) {
         uiInstance.showPreferences();
       } else {
-        uiInstance = renderConsentUI(config, {
-          onAcceptAll: () => saveAndUpdate(true, true, 'accept_all'),
-          onRejectAll: () => saveAndUpdate(false, false, 'reject_all'),
-          onSavePreferences: (preferences) =>
-            saveAndUpdate(preferences.analytics, preferences.marketing, 'custom'),
-        });
+        uiInstance = createUi();
         uiInstance.showPreferences();
       }
     },

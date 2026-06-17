@@ -11,6 +11,15 @@ describe('readScriptConfig', () => {
     });
   });
 
+  it('returns cookieInventoryUrl from data-cookie-inventory attribute', () => {
+    const script = document.createElement('script');
+    script.setAttribute('data-cookie-inventory', '/cookie-inventory.json');
+
+    expect(readScriptConfig(script)).toEqual({
+      cookieInventoryUrl: '/cookie-inventory.json',
+    });
+  });
+
   it('returns empty config when no privacy policy attribute is set', () => {
     const script = document.createElement('script');
 

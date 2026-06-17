@@ -19,23 +19,20 @@ npm run build
 npm test
 ```
 
-Het build-resultaat staat in `dist/cookie-consent.min.js`.
+Het build-resultaat staat in:
 
-## Google Tag Manager
-
-1. Host `dist/cookie-consent.min.js` op je domein.
-2. Maak een **Custom HTML** tag in GTM.
-3. Stel de trigger in op **Consent Initialization - All Pages**.
-4. Laad het script zo vroeg mogelijk.
+- `dist/cookie-consent.min.js` — consent banner
+- `dist/cookie-scanner.min.js` — eenmalige cookie scan
 
 ## Gebruik op elke website
 
-Laad het script en geef de URL naar je privacybeleid mee via een data-attribuut:
+Laad het script en geef de URL naar je privacybeleid en cookie-inventaris mee via data-attributen:
 
 ```html
 <script
   src="https://jouwdomein.nl/cookie-consent.min.js"
   data-privacy-policy-url="/privacybeleid"
+  data-cookie-inventory="/cookie-inventory.json"
 ></script>
 ```
 
@@ -58,6 +55,45 @@ Je kunt ook extra opties instellen vóór het script:
 ```
 
 `CookiePluginConfig` overschrijft waarden uit data-attributen op het script-element.
+
+## Cookie scan workflow
+
+1. Open je live website (pagina waar GTM/analytics actief zijn)
+2. Laad het scan-script:
+
+```html
+<script src="https://jouwdomein.nl/cookie-scanner.min.js"></script>
+```
+
+Of roep handmatig aan:
+
+```js
+CookieScanner.run({ monitorSeconds: 10 });
+```
+
+3. Er wordt `cookie-inventory.json` gedownload met vooringevulde categorieën op basis van bekende patronen
+4. **Bewerk het JSON-bestand handmatig** (categorie, provider, beschrijving)
+5. Deploy het bestand op je server als `/cookie-inventory.json`
+6. De consent banner toont de inventaris in het Details-tabblad
+
+Voorbeeld inventory item:
+
+```json
+{
+  "type": "cookie",
+  "name": "_ga",
+  "category": "analytics",
+  "provider": "Google Analytics",
+  "description": "Registreert bezoekstatistieken."
+}
+```
+
+## Google Tag Manager
+
+1. Host `dist/cookie-consent.min.js` en `cookie-inventory.json` op je domein.
+2. Maak een **Custom HTML** tag in GTM.
+3. Stel de trigger in op **Consent Initialization - All Pages**.
+4. Laad het script zo vroeg mogelijk.
 
 ## DataLayer event
 

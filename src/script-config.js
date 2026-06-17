@@ -13,10 +13,19 @@ export function readScriptConfig(script = getLoadingScript()) {
     script.dataset.privacyPolicyUrl ||
     '';
 
+  const cookieInventoryUrl =
+    script.getAttribute('data-cookie-inventory') ||
+    script.dataset.cookieInventory ||
+    '';
+
   const config = {};
 
   if (privacyPolicyUrl) {
     config.privacyPolicyUrl = privacyPolicyUrl;
+  }
+
+  if (cookieInventoryUrl) {
+    config.cookieInventoryUrl = cookieInventoryUrl;
   }
 
   return config;

@@ -1,3 +1,5 @@
+import { groupByCategory } from './inventory.js';
+
 const STYLE_ID = 'cp-consent-styles';
 const PRIMARY = '#57bce8';
 
@@ -179,8 +181,54 @@ export function injectStyles() {
       margin: 12px 0 0 28px;
     }
 
-    .cp-category-collapsed .cp-category-description {
+    .cp-category-collapsed .cp-category-description,
+    .cp-category-collapsed .cp-inventory-list {
       display: none;
+    }
+
+    .cp-category-badge {
+      background: #eeeeee;
+      border-radius: 999px;
+      color: #141414;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1;
+      min-width: 24px;
+      padding: 4px 8px;
+      text-align: center;
+    }
+
+    .cp-inventory-list {
+      list-style: none;
+      margin: 12px 0 0 28px;
+      padding: 0;
+    }
+
+    .cp-inventory-item {
+      border-top: 1px solid #eeeeee;
+      font-size: 13px;
+      line-height: 1.45;
+      padding: 10px 0;
+    }
+
+    .cp-inventory-item:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .cp-inventory-item-name {
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+
+    .cp-inventory-item-meta {
+      color: #555555;
+      margin: 0;
+    }
+
+    .cp-inventory-item-description {
+      color: #141414;
+      margin: 4px 0 0;
     }
 
     .cp-switch {
@@ -362,11 +410,14 @@ function trapFocus(container, dialog) {
 
 /**
  * @param {import('./config.js').DEFAULT_CONFIG} config
+ * @param {import('./inventory.js').CookieInventory | null} inventory
  * @param {ConsentUIHandlers} handlers
  * @returns {{ destroy: () => void; showPreferences: () => void }}
  */
-export function renderConsentUI(config, handlers) {
+export function renderConsentUI(config, inventory, handlers) {
   injectStyles();
+
+  const groupedInventory = groupInventory(config, inventory);
 
   const previousActiveElement = document.activeElement;
   const overlay = document.createElement('div');
@@ -432,18 +483,24 @@ export function renderConsentUI(config, handlers) {
 
   const functionalSwitch = createCategorySwitch(
     config.texts.categories.functional,
+    groupedInventory.functional,
     true,
-    true
+    true,
+    config
   );
   const analyticsSwitch = createCategorySwitch(
     config.texts.categories.analytics,
+    groupedInventory.analytics,
     false,
-    false
+    false,
+    config
   );
   const marketingSwitch = createCategorySwitch(
     config.texts.categories.marketing,
+    groupedInventory.marketing,
     false,
-    false
+    false,
+    config
   );
 
   detailsPanel.append(
@@ -451,6 +508,17 @@ export function renderConsentUI(config, handlers) {
     analyticsSwitch.element,
     marketingSwitch.element
   );
+
+  if (config.showUnclassified && groupedInventory.unclassified.length > 0) {
+    const unclassifiedSection = createCategorySwitch(
+      config.texts.categories.unclassified,
+      groupedInventory.unclassified,
+      false,
+      true,
+      config
+    );
+    detailsPanel.appendChild(unclassifiedSection.element);
+  }
   panels.details = detailsPanel;
 
   const aboutPanel = document.createElement('div');
@@ -484,10 +552,10 @@ export function renderConsentUI(config, handlers) {
 
   const footerMeta = document.createElement('div');
   footerMeta.className = 'cp-footer-meta cp-hidden';
-  footerMeta.textContent = config.texts.lastUpdated.replace(
-    '{date}',
-    formatDate(new Date())
-  );
+  const footerDate = inventory?.scannedAt
+    ? formatInventoryDate(inventory.scannedAt)
+    : formatDate(new Date());
+  footerMeta.textContent = config.texts.lastUpdated.replace('{date}', footerDate);
 
   const actions = document.createElement('div');
   actions.className = 'cp-actions';
@@ -601,11 +669,32 @@ function formatDate(date) {
 }
 
 /**
+ * @param {import('./config.js').DEFAULT_CONFIG} config
+ * @param {import('./inventory.js').CookieInventory | null} inventory
+ */
+function groupInventory(config, inventory) {
+  return groupByCategory(inventory, config.showUnclassified);
+}
+
+/**
+ * @param {string} isoDate
+ */
+function formatInventoryDate(isoDate) {
+  const date = new Date(isoDate);
+  if (Number.isNaN(date.getTime())) {
+    return formatDate(new Date());
+  }
+  return formatDate(date);
+}
+
+/**
  * @param {{ title: string; description: string }} category
+ * @param {import('./inventory.js').InventoryItem[]} items
  * @param {boolean} checked
  * @param {boolean} disabled
+ * @param {import('./config.js').DEFAULT_CONFIG} config
  */
-function createCategorySwitch(category, checked, disabled) {
+function createCategorySwitch(category, items, checked, disabled, config) {
   const element = document.createElement('div');
   element.className = 'cp-category';
 
@@ -636,7 +725,14 @@ function createCategorySwitch(category, checked, disabled) {
   categoryTitle.className = 'cp-category-title';
   categoryTitle.textContent = category.title;
 
-  titleWrap.appendChild(categoryTitle);
+  if (items.length > 0) {
+    const badge = document.createElement('span');
+    badge.className = 'cp-category-badge';
+    badge.textContent = String(items.length);
+    titleWrap.append(categoryTitle, badge);
+  } else {
+    titleWrap.appendChild(categoryTitle);
+  }
 
   const label = document.createElement('label');
   label.className = 'cp-switch';
@@ -665,6 +761,47 @@ function createCategorySwitch(category, checked, disabled) {
   categoryDescription.textContent = category.description;
 
   element.append(header, categoryDescription);
+
+  if (items.length > 0) {
+    const list = document.createElement('ul');
+    list.className = 'cp-inventory-list';
+
+    for (const item of items) {
+      const listItem = document.createElement('li');
+      listItem.className = 'cp-inventory-item';
+
+      const name = document.createElement('p');
+      name.className = 'cp-inventory-item-name';
+      name.textContent = item.name;
+      listItem.appendChild(name);
+
+      const metaParts = [];
+      if (item.provider) {
+        metaParts.push(`${config.texts.inventory.providerLabel}: ${item.provider}`);
+      }
+      if (item.type) {
+        metaParts.push(item.type);
+      }
+
+      if (metaParts.length > 0) {
+        const meta = document.createElement('p');
+        meta.className = 'cp-inventory-item-meta';
+        meta.textContent = metaParts.join(' · ');
+        listItem.appendChild(meta);
+      }
+
+      if (item.description) {
+        const itemDescription = document.createElement('p');
+        itemDescription.className = 'cp-inventory-item-description';
+        itemDescription.textContent = item.description;
+        listItem.appendChild(itemDescription);
+      }
+
+      list.appendChild(listItem);
+    }
+
+    element.appendChild(list);
+  }
 
   return { element, input };
 }
