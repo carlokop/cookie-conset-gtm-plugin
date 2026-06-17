@@ -113,4 +113,48 @@ describe('plugin init flow', () => {
     expect(document.querySelector('.cp-category-badge')?.textContent).toBe('1');
     expect(document.querySelector('.cp-inventory-item-name')?.textContent).toBe('_ga');
   });
+
+  it('shows inventory items from inline cookieInventory config', async () => {
+    init({
+      cookieInventory: {
+        version: 1,
+        items: [
+          {
+            type: 'cookie',
+            name: '_fbp',
+            category: 'marketing',
+            provider: 'Meta',
+            description: 'Advertenties',
+          },
+        ],
+      },
+    });
+    await flushPromises();
+
+    document.querySelector('.cp-btn-middle')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+    expect(document.querySelector('.cp-inventory-item-name')?.textContent).toBe('_fbp');
+  });
+
+  it('shows retention in details tab when present in inventory', async () => {
+    init({
+      cookieInventory: {
+        version: 1,
+        items: [
+          {
+            type: 'cookie',
+            name: '_ga',
+            category: 'analytics',
+            provider: 'Google Analytics',
+            retention: '2 jaar',
+          },
+        ],
+      },
+    });
+    await flushPromises();
+
+    document.querySelector('.cp-btn-middle')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+    expect(document.querySelector('.cp-inventory-item-meta')?.textContent).toContain('Bewaartermijn: 2 jaar');
+  });
 });

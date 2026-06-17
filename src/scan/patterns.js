@@ -7,12 +7,28 @@
  * @property {ScanItemType | ScanItemType[] | '*'} [type]
  * @property {InventoryCategory} category
  * @property {string} provider
+ * @property {string} [retention]
  */
 
 /** @type {ScanPattern[]} */
 export const PATTERNS = [
   // Functional cookies
-  { match: /^cp_cookie_consent$/, type: 'cookie', category: 'functional', provider: 'Cookie Plugin' },
+  { match: /^cp_cookie_consent$/, type: 'cookie', category: 'functional', provider: 'Cookie Plugin', retention: '180 dagen' },
+  { match: /^cookiefirst-consent$/, type: ['cookie', 'storage'], category: 'functional', provider: 'CookieFirst', retention: '1 jaar' },
+  { match: /^cookiefirst-id$/, type: 'storage', category: 'functional', provider: 'CookieFirst', retention: '1 jaar' },
+  { match: /cookiefirst\.com/, type: ['script', 'resource'], category: 'functional', provider: 'CookieFirst' },
+  { match: /crisp-client\/trigger/, type: 'storage', category: 'marketing', provider: 'Crisp' },
+  { match: /^crisp-client/, type: ['cookie', 'storage'], category: 'functional', provider: 'Crisp', retention: '6 maanden' },
+  { match: /crisp\.chat/, type: ['script', 'resource'], category: 'functional', provider: 'Crisp' },
+  { match: /^session:is_eu$/, type: 'storage', category: 'functional', provider: 'Crisp' },
+  { match: /trustpilot\.com/, type: ['script', 'resource'], category: 'functional', provider: 'Trustpilot' },
+  { match: /tjingo\.nl\/api\//, type: 'resource', category: 'functional', provider: 'Tjingo' },
+  { match: /tjingo\.nl\/assets\//, type: ['script', 'resource'], category: 'functional', provider: 'Tjingo' },
+  { match: /^index-.*\.js$/, type: ['script', 'resource'], category: 'functional', provider: 'Tjingo' },
+  { match: /^lastExternalReferrer/, type: 'storage', category: 'marketing', provider: 'Meta' },
+  { match: /mouseflow\.com/, type: ['script', 'resource'], category: 'analytics', provider: 'Mouseflow' },
+  { match: /adsmurai\.com/, type: ['script', 'resource'], category: 'marketing', provider: 'Adsmurai' },
+  { match: /google\.com\/ccm\/collect/, type: 'resource', category: 'analytics', provider: 'Google Analytics' },
   { match: /^PHPSESSID$/, type: 'cookie', category: 'functional', provider: 'PHP' },
   { match: /^wordpress_/, type: 'cookie', category: 'functional', provider: 'WordPress' },
   { match: /^wp-/, type: 'cookie', category: 'functional', provider: 'WordPress' },
@@ -23,11 +39,12 @@ export const PATTERNS = [
   { match: /^ASP\.NET_SessionId$/, type: 'cookie', category: 'functional', provider: 'ASP.NET' },
 
   // Analytics cookies
-  { match: /^_ga$/, type: 'cookie', category: 'analytics', provider: 'Google Analytics' },
-  { match: /^_ga_/, type: 'cookie', category: 'analytics', provider: 'Google Analytics' },
-  { match: /^_gid$/, type: 'cookie', category: 'analytics', provider: 'Google Analytics' },
-  { match: /^_gat/, type: 'cookie', category: 'analytics', provider: 'Google Analytics' },
-  { match: /^_gcl_au$/, type: 'cookie', category: 'analytics', provider: 'Google Ads' },
+  { match: /^_ga$/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '2 jaar' },
+  { match: /^_ga_/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '2 jaar' },
+  { match: /^_gid$/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '1 dag' },
+  { match: /^_gat/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '1 minuut' },
+  { match: /^_gcl_au$/, type: 'cookie', category: 'marketing', provider: 'Google Ads', retention: '3 maanden' },
+  { match: /^_gcl_ls$/, type: 'storage', category: 'marketing', provider: 'Google Ads' },
   { match: /^AMP_/, type: 'cookie', category: 'analytics', provider: 'Google AMP' },
   { match: /^_hj/, type: 'cookie', category: 'analytics', provider: 'Hotjar' },
   { match: /^_clck$/, type: 'cookie', category: 'analytics', provider: 'Microsoft Clarity' },
@@ -40,9 +57,12 @@ export const PATTERNS = [
   { match: /^__hssrc$/, type: 'cookie', category: 'analytics', provider: 'HubSpot' },
   { match: /^pk_id/, type: 'cookie', category: 'analytics', provider: 'Matomo' },
   { match: /^pk_ses/, type: 'cookie', category: 'analytics', provider: 'Matomo' },
+  { match: /^_pin_unauth$/, type: 'cookie', category: 'marketing', provider: 'Pinterest', retention: '1 jaar' },
+  { match: /^_uetsid/, type: ['cookie', 'storage'], category: 'marketing', provider: 'Microsoft Advertising', retention: '1 dag' },
+  { match: /^_uetvid/, type: ['cookie', 'storage'], category: 'marketing', provider: 'Microsoft Advertising', retention: '13 maanden' },
 
   // Marketing cookies
-  { match: /^_fbp$/, type: 'cookie', category: 'marketing', provider: 'Meta' },
+  { match: /^_fbp$/, type: 'cookie', category: 'marketing', provider: 'Meta', retention: '3 maanden' },
   { match: /^_fbc$/, type: 'cookie', category: 'marketing', provider: 'Meta' },
   { match: /^fr$/, type: 'cookie', category: 'marketing', provider: 'Meta' },
   { match: /^IDE$/, type: 'cookie', category: 'marketing', provider: 'Google DoubleClick' },
@@ -76,9 +96,30 @@ export const PATTERNS = [
   { match: /linkedin\.com\/px/, type: ['script', 'resource'], category: 'marketing', provider: 'LinkedIn' },
   { match: /tiktok\.com\/i18n\/pixel/, type: ['script', 'resource'], category: 'marketing', provider: 'TikTok' },
   { match: /analytics\.tiktok\.com/, type: ['script', 'resource'], category: 'marketing', provider: 'TikTok' },
+  { match: /pinimg\.com/, type: ['script', 'resource'], category: 'marketing', provider: 'Pinterest' },
+  { match: /ct\.pinterest\.com/, type: ['script', 'resource'], category: 'marketing', provider: 'Pinterest' },
+  { match: /bat\.bing\.com/, type: ['script', 'resource'], category: 'marketing', provider: 'Microsoft Advertising' },
+  { match: /google\.com\/rmkt/, type: 'resource', category: 'marketing', provider: 'Google Ads' },
+  { match: /gtag\/js\?id=AW-/, type: ['script', 'resource'], category: 'marketing', provider: 'Google Ads' },
+  { match: /localhost.*cookie-scanner/, type: ['script', 'resource'], category: 'unclassified', provider: '' },
 ];
 
-const UNCLASSIFIED = { category: /** @type {InventoryCategory} */ ('unclassified'), provider: '' };
+const UNCLASSIFIED = {
+  category: /** @type {InventoryCategory} */ ('unclassified'),
+  provider: '',
+  retention: '',
+};
+
+/**
+ * @returns {{ category: InventoryCategory; provider: string; retention: string }}
+ */
+function patternResult(pattern) {
+  return {
+    category: pattern.category,
+    provider: pattern.provider,
+    retention: pattern.retention || '',
+  };
+}
 
 /**
  * @param {string} value
@@ -107,7 +148,7 @@ function typeMatches(itemType, patternType) {
 
 /**
  * @param {{ type: ScanItemType; name: string; src?: string }} item
- * @returns {{ category: InventoryCategory; provider: string }}
+ * @returns {{ category: InventoryCategory; provider: string; retention: string }}
  */
 export function lookupItem(item) {
   const lookupValues = [item.name];
@@ -122,7 +163,7 @@ export function lookupItem(item) {
 
     for (const value of lookupValues) {
       if (matchesPattern(value, pattern.match)) {
-        return { category: pattern.category, provider: pattern.provider };
+        return patternResult(pattern);
       }
     }
   }

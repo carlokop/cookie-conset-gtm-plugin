@@ -13,4 +13,9 @@ export {
   DEFAULT_CONSENT_MODE,
 } from './consent-mode.js';
 export { readConsentCookie, writeConsentCookie, isConsentValid } from './cookie-storage.js';
-export { loadInventory, parseInventory, groupByCategory } from './inventory.js';
+export {
+  loadInventory,
+  parseInventory,
+  resolveInventory,
+  groupByCategory,
+} from './inventory.js';

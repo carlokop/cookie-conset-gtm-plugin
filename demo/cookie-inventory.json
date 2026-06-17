@@ -1,36 +1,397 @@
 {
   "version": 1,
-  "scannedAt": "2026-06-17T10:00:00.000Z",
-  "pageUrl": "https://example.com/",
+  "scannedAt": "2026-06-17T10:46:05.724Z",
+  "pageUrl": "https://www.tjingo.nl",
   "items": [
     {
       "type": "cookie",
-      "name": "cp_cookie_consent",
-      "category": "functional",
-      "provider": "Cookie Plugin",
-      "description": "Slaat uw cookievoorkeuren op."
+      "name": "_gcl_au",
+      "category": "marketing",
+      "provider": "Google Ads",
+      "description": "",
+      "retention": "3 maanden"
+    },
+    {
+      "type": "cookie",
+      "name": "_pin_unauth",
+      "category": "marketing",
+      "provider": "Pinterest",
+      "description": "",
+      "retention": "1 jaar"
     },
     {
       "type": "cookie",
       "name": "_ga",
       "category": "analytics",
       "provider": "Google Analytics",
-      "description": "Registreert een unieke ID om bezoekstatistieken bij te houden."
+      "description": "",
+      "retention": "1 jaar"
     },
     {
-      "type": "script",
-      "name": "gtm.js",
-      "src": "https://www.googletagmanager.com/gtm.js?id=GTM-XXXX",
+      "type": "cookie",
+      "name": "crisp-client/session/*",
+      "category": "functional",
+      "provider": "Crisp",
+      "description": "",
+      "retention": "6 maanden"
+    },
+    {
+      "type": "cookie",
+      "name": "cookiefirst-consent",
+      "category": "functional",
+      "provider": "CookieFirst",
+      "description": "",
+      "retention": "12 maanden"
+    },
+    {
+      "type": "cookie",
+      "name": "crisp-client/socket/*",
+      "category": "functional",
+      "provider": "Crisp",
+      "description": "",
+      "retention": "2 dagen"
+    },
+    {
+      "type": "cookie",
+      "name": "_ga_72KXK1LYPV",
       "category": "analytics",
-      "provider": "Google Tag Manager",
-      "description": ""
+      "provider": "Google Analytics",
+      "description": "",
+      "retention": "1 jaar"
     },
     {
       "type": "cookie",
       "name": "_fbp",
       "category": "marketing",
       "provider": "Meta",
-      "description": "Gebruikt door Meta voor advertentiedoeleinden."
+      "description": "",
+      "retention": "3 maanden"
+    },
+    {
+      "type": "cookie",
+      "name": "_uetsid",
+      "category": "marketing",
+      "provider": "Microsoft Advertising",
+      "description": "",
+      "retention": "1 dag"
+    },
+    {
+      "type": "cookie",
+      "name": "_uetvid",
+      "category": "marketing",
+      "provider": "Microsoft Advertising",
+      "description": "",
+      "retention": "1 jaar"
+    },
+    {
+      "type": "storage",
+      "name": "crisp-client/session/*:e",
+      "category": "functional",
+      "provider": "Crisp",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "crisp-client/trigger/*/visit/last",
+      "category": "marketing",
+      "provider": "Crisp",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "_uetvid_exp",
+      "category": "marketing",
+      "provider": "Microsoft Advertising",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "crisp-client/session/*",
+      "category": "functional",
+      "provider": "Crisp",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "_gcl_ls",
+      "category": "marketing",
+      "provider": "Google Ads",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "cookiefirst-consent",
+      "category": "functional",
+      "provider": "CookieFirst",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "cookiefirst-id",
+      "category": "functional",
+      "provider": "CookieFirst",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "_uetsid",
+      "category": "marketing",
+      "provider": "Microsoft Advertising",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "lastExternalReferrerTime",
+      "category": "marketing",
+      "provider": "Meta",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "crisp-client/trigger/*/status/30sec-trigger",
+      "category": "marketing",
+      "provider": "Crisp",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "_uetsid_exp",
+      "category": "marketing",
+      "provider": "Microsoft Advertising",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "crisp-client/trigger/*/visit/count",
+      "category": "marketing",
+      "provider": "Crisp",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "_uetvid",
+      "category": "marketing",
+      "provider": "Microsoft Advertising",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "lastExternalReferrer",
+      "category": "marketing",
+      "provider": "Meta",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "crisp-client/trigger/*/status/exit-intent-all-brands",
+      "category": "marketing",
+      "provider": "Crisp",
+      "description": "",
+      "retention": "Permanent (browser)"
+    },
+    {
+      "type": "storage",
+      "name": "session:is_eu",
+      "category": "functional",
+      "provider": "Crisp",
+      "description": "",
+      "retention": "Sessie"
+    },
+    {
+      "type": "script",
+      "name": "*.js",
+      "src": "https://cdn.mouseflow.com/projects/*.js",
+      "category": "analytics",
+      "provider": "Mouseflow",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "bat.js",
+      "src": "https://bat.bing.com/bat.js",
+      "category": "marketing",
+      "provider": "Microsoft Advertising",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "sdk.js",
+      "src": "https://cdn-st.adsmurai.com/sdk.js",
+      "category": "marketing",
+      "provider": "Adsmurai",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "225432757908338",
+      "src": "https://connect.facebook.net/signals/config/225432757908338",
+      "category": "marketing",
+      "provider": "Meta",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "fbevents.js",
+      "src": "https://connect.facebook.net/en_US/fbevents.js",
+      "category": "marketing",
+      "provider": "Meta",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "token_create.js",
+      "src": "https://ct.pinterest.com/static/ct/token_create.js",
+      "category": "marketing",
+      "provider": "Pinterest",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "main.d6ed736a.js",
+      "src": "https://s.pinimg.com/ct/lib/main.d6ed736a.js",
+      "category": "marketing",
+      "provider": "Pinterest",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "core.js",
+      "src": "https://s.pinimg.com/ct/core.js",
+      "category": "marketing",
+      "provider": "Pinterest",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "js",
+      "src": "https://www.googletagmanager.com/gtag/js",
+      "category": "analytics",
+      "provider": "Google Tag Manager",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "consent.js",
+      "src": "https://consent.cookiefirst.com/sites/tjingo.nl-*/consent.js",
+      "category": "functional",
+      "provider": "CookieFirst",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "gtm.js",
+      "src": "https://www.googletagmanager.com/gtm.js",
+      "category": "analytics",
+      "provider": "Google Tag Manager",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "index-BD_iirHW.js",
+      "category": "functional",
+      "provider": "Tjingo",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "l.js",
+      "src": "https://client.crisp.chat/l.js",
+      "category": "functional",
+      "provider": "Crisp",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "consentBanner.no-autoblock.js",
+      "src": "https://consent.cookiefirst.com/consentBanner.no-autoblock.js",
+      "category": "functional",
+      "provider": "CookieFirst",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "997520393",
+      "src": "https://googleads.g.doubleclick.net/pagead/viewthroughconversion/997520393",
+      "category": "marketing",
+      "provider": "Google DoubleClick",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "client_default_5e4e0c0.js",
+      "src": "https://client.crisp.chat/static/javascripts/client_default_5e4e0c0.js",
+      "category": "functional",
+      "provider": "Crisp",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "5202076.js",
+      "src": "https://bat.bing.com/p/action/5202076.js",
+      "category": "marketing",
+      "provider": "Microsoft Advertising",
+      "description": ""
+    },
+    {
+      "type": "script",
+      "name": "tp.widget.bootstrap.min.js",
+      "category": "unclassified",
+      "provider": "",
+      "description": ""
+    },
+    {
+      "type": "resource",
+      "name": "997520393",
+      "src": "https://www.google.com/rmkt/collect/997520393",
+      "category": "marketing",
+      "provider": "Google Ads",
+      "description": ""
+    },
+    {
+      "type": "resource",
+      "name": "collect",
+      "src": "https://www.google.com/ccm/collect",
+      "category": "analytics",
+      "provider": "Google Analytics",
+      "description": ""
+    },
+    {
+      "type": "resource",
+      "name": "user",
+      "src": "https://ct.pinterest.com/user",
+      "category": "marketing",
+      "provider": "Pinterest",
+      "description": ""
+    },
+    {
+      "type": "resource",
+      "name": "v3",
+      "src": "https://ct.pinterest.com/v3",
+      "category": "marketing",
+      "provider": "Pinterest",
+      "description": ""
+    },
+    {
+      "type": "resource",
+      "name": "ct.html",
+      "src": "https://ct.pinterest.com/ct.html",
+      "category": "marketing",
+      "provider": "Pinterest",
+      "description": ""
     }
   ]
 }

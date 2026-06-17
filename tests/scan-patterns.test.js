@@ -6,6 +6,7 @@ describe('scan patterns lookup', () => {
     expect(lookupItem({ type: 'cookie', name: '_ga' })).toEqual({
       category: 'analytics',
       provider: 'Google Analytics',
+      retention: '2 jaar',
     });
   });
 
@@ -13,6 +14,7 @@ describe('scan patterns lookup', () => {
     expect(lookupItem({ type: 'cookie', name: '_fbp' })).toEqual({
       category: 'marketing',
       provider: 'Meta',
+      retention: '3 maanden',
     });
   });
 
@@ -26,6 +28,7 @@ describe('scan patterns lookup', () => {
     ).toEqual({
       category: 'analytics',
       provider: 'Google Tag Manager',
+      retention: '',
     });
   });
 
@@ -33,6 +36,7 @@ describe('scan patterns lookup', () => {
     expect(lookupItem({ type: 'cookie', name: 'mijn_eigen_cookie' })).toEqual({
       category: 'unclassified',
       provider: '',
+      retention: '',
     });
   });
 

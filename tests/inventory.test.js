@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { parseInventory, groupByCategory } from '../src/inventory.js';
+import { describe, it, expect, vi } from 'vitest';
+import { parseInventory, groupByCategory, resolveInventory } from '../src/inventory.js';
 
 describe('inventory', () => {
   const sample = {
@@ -35,5 +35,34 @@ describe('inventory', () => {
   it('can hide unclassified items', () => {
     const grouped = groupByCategory(parseInventory(sample), false);
     expect(grouped.unclassified).toHaveLength(0);
+  });
+
+  it('prefers inline cookieInventory over URL fetch', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const inventory = await resolveInventory({
+      cookieInventory: sample,
+      cookieInventoryUrl: '/cookie-inventory.json',
+    });
+
+    expect(inventory?.items).toHaveLength(3);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('loads inventory from URL when inline config is missing', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => sample,
+      })
+    );
+
+    const inventory = await resolveInventory({
+      cookieInventoryUrl: '/cookie-inventory.json',
+    });
+
+    expect(inventory?.items[0].name).toBe('_ga');
   });
 });

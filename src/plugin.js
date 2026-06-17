@@ -6,7 +6,7 @@ import {
   applyConsentUpdate,
   createConsentRecord,
 } from './consent-mode.js';
-import { loadInventory } from './inventory.js';
+import { resolveInventory } from './inventory.js';
 import { renderConsentUI } from './ui.js';
 
 const GLOBAL_KEY = 'CookiePlugin';
@@ -54,9 +54,7 @@ async function startPlugin(config) {
     return;
   }
 
-  const inventory = config.cookieInventoryUrl
-    ? await loadInventory(config.cookieInventoryUrl)
-    : null;
+  const inventory = await resolveInventory(config);
 
   let uiInstance = null;
 

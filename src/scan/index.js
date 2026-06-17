@@ -1,5 +1,9 @@
 import { collectItemsWithMonitor } from './collect.js';
+import { collectCookieExpiries } from './cookie-expiries.js';
+import { filterTrackerItems } from './filter.js';
 import { lookupItem } from './patterns.js';
+import { resolveRetention } from './retention.js';
+import { sanitizeCollectedItems, sanitizePageUrl } from './sanitize.js';
 
 /**
  * @typedef {import('./patterns.js').InventoryCategory} InventoryCategory
@@ -13,6 +17,7 @@ import { lookupItem } from './patterns.js';
  * @property {InventoryCategory} category
  * @property {string} provider
  * @property {string} description
+ * @property {string} retention
  */
 
 /**
@@ -25,11 +30,13 @@ import { lookupItem } from './patterns.js';
 
 /**
  * @param {import('./collect.js').RawScanItem[]} rawItems
+ * @param {Map<string, number | null>} [cookieExpiries]
  * @returns {InventoryItem[]}
  */
-export function buildInventoryItems(rawItems) {
+export function buildInventoryItems(rawItems, cookieExpiries = new Map()) {
   return rawItems.map((item) => {
     const lookup = lookupItem(item);
+    const retention = resolveRetention(item, cookieExpiries, lookup.retention);
     return {
       type: item.type,
       name: item.name,
@@ -37,6 +44,7 @@ export function buildInventoryItems(rawItems) {
       category: lookup.category,
       provider: lookup.provider,
       description: '',
+      ...(retention ? { retention } : {}),
     };
   });
 }
@@ -77,9 +85,11 @@ export async function run(options = {}) {
   const monitorSeconds = options.monitorSeconds ?? 5;
   const filename = options.filename ?? 'cookie-inventory.json';
   const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const rawItems = await collectItemsWithMonitor(monitorSeconds);
-  const items = buildInventoryItems(rawItems);
-  const inventory = createInventory(items, pageUrl);
+  const cookieExpiries = await collectCookieExpiries();
+  const sanitized = sanitizeCollectedItems(await collectItemsWithMonitor(monitorSeconds));
+  const rawItems = filterTrackerItems(sanitized, pageUrl);
+  const items = buildInventoryItems(rawItems, cookieExpiries);
+  const inventory = createInventory(items, sanitizePageUrl(pageUrl));
 
   if (typeof document !== 'undefined') {
     downloadInventory(inventory, filename);

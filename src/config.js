@@ -48,6 +48,7 @@ export const DEFAULT_CONFIG = {
     },
     inventory: {
       providerLabel: 'Aanbieder',
+      retentionLabel: 'Bewaartermijn',
       noItems: 'Geen items gevonden in de inventaris.',
     },
   },

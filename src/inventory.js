@@ -8,6 +8,7 @@
  * @property {InventoryCategory} category
  * @property {string} [provider]
  * @property {string} [description]
+ * @property {string} [retention]
  */
 
 /**
@@ -56,6 +57,7 @@ export function parseInventory(data) {
       category: /** @type {InventoryCategory} */ (category),
       ...(typeof item.provider === 'string' ? { provider: item.provider } : {}),
       ...(typeof item.description === 'string' ? { description: item.description } : {}),
+      ...(typeof item.retention === 'string' ? { retention: item.retention } : {}),
     });
   }
 
@@ -86,6 +88,22 @@ export async function loadInventory(url) {
   } catch {
     return null;
   }
+}
+
+/**
+ * @param {{ cookieInventory?: unknown; cookieInventoryUrl?: string }} config
+ * @returns {Promise<CookieInventory | null>}
+ */
+export async function resolveInventory(config) {
+  if (config.cookieInventory) {
+    return parseInventory(config.cookieInventory);
+  }
+
+  if (config.cookieInventoryUrl) {
+    return loadInventory(config.cookieInventoryUrl);
+  }
+
+  return null;
 }
 
 /**

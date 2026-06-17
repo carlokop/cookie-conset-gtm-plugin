@@ -782,6 +782,9 @@ function createCategorySwitch(category, items, checked, disabled, config) {
       if (item.type) {
         metaParts.push(item.type);
       }
+      if (item.retention) {
+        metaParts.push(`${config.texts.inventory.retentionLabel}: ${item.retention}`);
+      }
 
       if (metaParts.length > 0) {
         const meta = document.createElement('p');
