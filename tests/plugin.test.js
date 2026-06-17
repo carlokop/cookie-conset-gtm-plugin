@@ -167,7 +167,7 @@ describe('plugin init flow', () => {
               name: '_ga',
               category: 'analytics',
               provider: 'Google Analytics',
-              description: 'Statistieken',
+              description: 'Statistics',
             },
           ],
         }),
@@ -193,7 +193,7 @@ describe('plugin init flow', () => {
             name: '_fbp',
             category: 'marketing',
             provider: 'Meta',
-            description: 'Advertenties',
+            description: 'Advertising',
           },
         ],
       },
@@ -215,7 +215,7 @@ describe('plugin init flow', () => {
             name: '_ga',
             category: 'analytics',
             provider: 'Google Analytics',
-            retention: '2 jaar',
+            retention: '2 years',
           },
         ],
       },
@@ -224,6 +224,6 @@ describe('plugin init flow', () => {
 
     document.querySelector('.cp-btn-middle')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
-    expect(document.querySelector('.cp-inventory-item-meta')?.textContent).toContain('Bewaartermijn: 2 jaar');
+    expect(document.querySelector('.cp-inventory-item-meta')?.textContent).toContain('Retention: 2 years');
   });
 });

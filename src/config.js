@@ -7,50 +7,49 @@ export const DEFAULT_CONFIG = {
   cookieInventoryUrl: '',
   showUnclassified: true,
   texts: {
-    title: 'Deze website gebruikt cookies',
+    title: 'This website uses cookies',
     description:
-      'We gebruiken cookies om content en advertenties te personaliseren, social media-functies aan te bieden en ons verkeer te analyseren. We delen ook informatie over uw gebruik van onze site met onze social media-, advertentie- en analysepartners.',
-    acceptAll: 'Alles toestaan',
-    rejectAll: 'Weigeren',
-    customize: 'Aanpassen',
-    savePreferences: 'Selectie toestaan',
-    back: 'Terug',
-    privacyPolicy: 'Privacybeleid',
-    aboutTitle: 'Over cookies',
+      'We use cookies to personalize content and ads, provide social media features, and analyze our traffic. We also share information about your use of our site with our social media, advertising, and analytics partners.',
+    acceptAll: 'Allow all',
+    rejectAll: 'Deny',
+    customize: 'Customize',
+    savePreferences: 'Allow selection',
+    back: 'Back',
+    privacyPolicy: 'Privacy policy',
+    aboutTitle: 'About cookies',
     aboutDescription:
-      'Cookies zijn kleine tekstbestanden die op uw apparaat worden opgeslagen wanneer u een website bezoekt. Ze helpen de site te laten werken, onthouden voorkeuren en geven inzicht in hoe de website wordt gebruikt.',
-    lastUpdated: 'Cookieverklaring voor het laatst bijgewerkt op {date}',
+      'Cookies are small text files stored on your device when you visit a website. They help the site work, remember preferences, and provide insight into how the website is used.',
+    lastUpdated: 'Cookie declaration last updated on {date}',
     tabs: {
-      consent: 'Toestemming',
+      consent: 'Consent',
       details: 'Details',
-      about: 'Over',
+      about: 'About',
     },
     categories: {
       functional: {
-        title: 'Noodzakelijk',
+        title: 'Necessary',
         description:
-          'Noodzakelijke cookies helpen een website bruikbaarder te maken door basisfuncties mogelijk te maken, zoals paginanavigatie en toegang tot beveiligde delen van de website. De website kan zonder deze cookies niet goed functioneren.',
+          'Necessary cookies help make a website usable by enabling basic functions such as page navigation and access to secure areas. The website cannot function properly without these cookies.',
       },
       analytics: {
-        title: 'Statistieken',
+        title: 'Statistics',
         description:
-          'Statistische cookies helpen website-eigenaren te begrijpen hoe bezoekers met websites omgaan door anoniem informatie te verzamelen en te rapporteren.',
+          'Statistical cookies help website owners understand how visitors interact with websites by collecting and reporting information anonymously.',
       },
       marketing: {
         title: 'Marketing',
         description:
-          'Marketingcookies worden gebruikt om bezoekers te volgen wanneer ze verschillende websites bezoeken. Het doel is advertenties weer te geven die relevant en aantrekkelijk zijn voor de individuele gebruiker.',
+          'Marketing cookies are used to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user.',
       },
       unclassified: {
-        title: 'Niet geclassificeerd',
-        description:
-          'Deze cookies of scripts zijn nog niet ingedeeld in een categorie.',
+        title: 'Unclassified',
+        description: 'These cookies or scripts have not yet been classified into a category.',
       },
     },
     inventory: {
-      providerLabel: 'Aanbieder',
-      retentionLabel: 'Bewaartermijn',
-      noItems: 'Geen items gevonden in de inventaris.',
+      providerLabel: 'Provider',
+      retentionLabel: 'Retention',
+      noItems: 'No items found in the inventory.',
     },
   },
 };

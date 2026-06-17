@@ -135,15 +135,19 @@ export function injectStyles() {
     }
 
     .cp-category-toggle {
+      align-items: center;
       appearance: none;
       background: transparent;
       border: none;
       color: #141414;
       cursor: pointer;
+      display: inline-flex;
       flex-shrink: 0;
-      font-size: 12px;
+      height: 24px;
+      justify-content: center;
       line-height: 1;
-      padding: 4px;
+      padding: 0;
+      width: 24px;
     }
 
     .cp-category-toggle:focus-visible {
@@ -152,12 +156,17 @@ export function injectStyles() {
     }
 
     .cp-category-toggle-icon {
+      border: solid currentColor;
+      border-width: 0 2px 2px 0;
       display: inline-block;
+      height: 7px;
+      transform: rotate(45deg);
       transition: transform 0.2s ease;
+      width: 7px;
     }
 
     .cp-category-collapsed .cp-category-toggle-icon {
-      transform: rotate(-90deg);
+      transform: rotate(-45deg);
     }
 
     .cp-category-title-wrap {
@@ -503,6 +512,9 @@ export function renderConsentUI(config, inventory, handlers) {
     config
   );
 
+  /** @type {Array<{ collapse: () => void }>} */
+  const categorySwitches = [functionalSwitch, analyticsSwitch, marketingSwitch];
+
   detailsPanel.append(
     functionalSwitch.element,
     analyticsSwitch.element,
@@ -517,6 +529,7 @@ export function renderConsentUI(config, inventory, handlers) {
       true,
       config
     );
+    categorySwitches.push(unclassifiedSection);
     detailsPanel.appendChild(unclassifiedSection.element);
   }
   panels.details = detailsPanel;
@@ -624,6 +637,12 @@ export function renderConsentUI(config, inventory, handlers) {
     };
   }
 
+  function collapseAllCategories() {
+    for (const categorySwitch of categorySwitches) {
+      categorySwitch.collapse();
+    }
+  }
+
   /** @param {ConsentTab} tab */
   function setActiveTab(tab) {
     activeTab = tab;
@@ -636,6 +655,10 @@ export function renderConsentUI(config, inventory, handlers) {
 
     for (const [name, panel] of Object.entries(panels)) {
       panel.classList.toggle('cp-hidden', name !== tab);
+    }
+
+    if (tab === 'details') {
+      collapseAllCategories();
     }
 
     footerMeta.classList.toggle('cp-hidden', tab !== 'details');
@@ -696,7 +719,7 @@ function formatInventoryDate(isoDate) {
  */
 function createCategorySwitch(category, items, checked, disabled, config) {
   const element = document.createElement('div');
-  element.className = 'cp-category';
+  element.className = 'cp-category cp-category-collapsed';
 
   const header = document.createElement('div');
   header.className = 'cp-category-header';
@@ -704,19 +727,23 @@ function createCategorySwitch(category, items, checked, disabled, config) {
   const expandBtn = document.createElement('button');
   expandBtn.type = 'button';
   expandBtn.className = 'cp-category-toggle';
-  expandBtn.setAttribute('aria-expanded', 'true');
+  expandBtn.setAttribute('aria-expanded', 'false');
   expandBtn.setAttribute('aria-label', category.title);
 
   const expandIcon = document.createElement('span');
   expandIcon.className = 'cp-category-toggle-icon';
   expandIcon.setAttribute('aria-hidden', 'true');
-  expandIcon.textContent = '▼';
   expandBtn.appendChild(expandIcon);
 
   expandBtn.addEventListener('click', () => {
     const collapsed = element.classList.toggle('cp-category-collapsed');
     expandBtn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
   });
+
+  function collapse() {
+    element.classList.add('cp-category-collapsed');
+    expandBtn.setAttribute('aria-expanded', 'false');
+  }
 
   const titleWrap = document.createElement('div');
   titleWrap.className = 'cp-category-title-wrap';
@@ -806,5 +833,5 @@ function createCategorySwitch(category, items, checked, disabled, config) {
     element.appendChild(list);
   }
 
-  return { element, input };
+  return { element, input, collapse };
 }

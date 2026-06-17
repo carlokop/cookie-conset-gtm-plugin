@@ -5,7 +5,7 @@ import * as babel from '@babel/core';
 const root = resolve(import.meta.dirname, '..');
 const bundlePath = resolve(root, 'dist/cookie-consent.min.js');
 const inventoryPath = resolve(root, process.argv[2] || 'demo/cookie-inventory.json');
-const privacyPolicyUrl = process.argv[3] || '/privacybeleid';
+const privacyPolicyUrl = process.argv[3] || '/privacy-policy';
 const outPath = resolve(root, 'dist/gtm-consent-tag.html');
 const es5BundlePath = resolve(root, 'dist/cookie-consent.gtm.js');
 
@@ -60,10 +60,10 @@ const html = `<!--
   GTM Custom HTML tag — consent UI (ES5).
   Trigger: Consent Initialization - All Pages
 
-  Vereiste tag-volgorde op dezelfde trigger:
+  Required tag order on the same trigger:
   1. gtm-consent-bridge.html
-  2. gtm-consent-template.tpl (importeer als template-tag)
-  3. deze gtm-consent-tag.html
+  2. gtm-consent-template.tpl (import as template tag)
+  3. this gtm-consent-tag.html
 -->
 <script>
   window.CookiePluginConfig = ${JSON.stringify(config, null, 2)};
@@ -78,9 +78,9 @@ writeFileSync(outPath, html, 'utf8');
 const sizeKb = Math.round(Buffer.byteLength(html, 'utf8') / 1024);
 console.log(`Built ${outPath} (${sizeKb} KB, ES5)`);
 console.log(`Built ${es5BundlePath}`);
-console.log('GTM installatie (Consent Initialization - All Pages):');
+console.log('GTM setup (Consent Initialization - All Pages):');
 console.log('1. dist/gtm-consent-bridge.html');
-console.log('2. dist/gtm-consent-template.tpl (importeer als template)');
+console.log('2. dist/gtm-consent-template.tpl (import as template)');
 console.log('3. dist/gtm-consent-tag.html');
 
 /**

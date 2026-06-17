@@ -9,7 +9,7 @@
       "category": "marketing",
       "provider": "Google Ads",
       "description": "",
-      "retention": "3 maanden"
+      "retention": "3 months"
     },
     {
       "type": "cookie",
@@ -17,7 +17,7 @@
       "category": "marketing",
       "provider": "Pinterest",
       "description": "",
-      "retention": "1 jaar"
+      "retention": "1 years"
     },
     {
       "type": "cookie",
@@ -25,7 +25,7 @@
       "category": "analytics",
       "provider": "Google Analytics",
       "description": "",
-      "retention": "1 jaar"
+      "retention": "1 years"
     },
     {
       "type": "cookie",
@@ -33,7 +33,7 @@
       "category": "functional",
       "provider": "Crisp",
       "description": "",
-      "retention": "6 maanden"
+      "retention": "6 months"
     },
     {
       "type": "cookie",
@@ -41,7 +41,7 @@
       "category": "functional",
       "provider": "CookieFirst",
       "description": "",
-      "retention": "12 maanden"
+      "retention": "12 months"
     },
     {
       "type": "cookie",
@@ -49,7 +49,7 @@
       "category": "functional",
       "provider": "Crisp",
       "description": "",
-      "retention": "2 dagen"
+      "retention": "2 days"
     },
     {
       "type": "cookie",
@@ -57,7 +57,7 @@
       "category": "analytics",
       "provider": "Google Analytics",
       "description": "",
-      "retention": "1 jaar"
+      "retention": "1 years"
     },
     {
       "type": "cookie",
@@ -65,7 +65,7 @@
       "category": "marketing",
       "provider": "Meta",
       "description": "",
-      "retention": "3 maanden"
+      "retention": "3 months"
     },
     {
       "type": "cookie",
@@ -73,7 +73,7 @@
       "category": "marketing",
       "provider": "Microsoft Advertising",
       "description": "",
-      "retention": "1 dag"
+      "retention": "1 day"
     },
     {
       "type": "cookie",
@@ -81,7 +81,7 @@
       "category": "marketing",
       "provider": "Microsoft Advertising",
       "description": "",
-      "retention": "1 jaar"
+      "retention": "1 years"
     },
     {
       "type": "storage",
@@ -209,7 +209,7 @@
       "category": "functional",
       "provider": "Crisp",
       "description": "",
-      "retention": "Sessie"
+      "retention": "Session"
     },
     {
       "type": "script",

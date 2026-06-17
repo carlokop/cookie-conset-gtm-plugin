@@ -24,31 +24,31 @@ export function formatRetentionFromExpiry(expires, now = new Date()) {
   const expiresUnixSeconds = normalizeExpiryToSeconds(expires);
 
   if (expiresUnixSeconds == null) {
-    return 'Sessie';
+    return 'Session';
   }
 
   const nowSeconds = now.getTime() / 1000;
   const days = Math.round((expiresUnixSeconds - nowSeconds) / 86400);
 
   if (days <= 0) {
-    return 'Verlopen';
+    return 'Expired';
   }
   if (days > 4000) {
     return '';
   }
   if (days === 1) {
-    return '1 dag';
+    return '1 day';
   }
   if (days < 30) {
-    return `${days} dagen`;
+    return `${days} days`;
   }
   if (days < 365) {
     const months = Math.round(days / 30);
-    return months === 1 ? '1 maand' : `${months} maanden`;
+    return months === 1 ? '1 month' : `${months} months`;
   }
 
   const years = Math.round(days / 365);
-  return years === 1 ? '1 jaar' : `${years} jaar`;
+  return years === 1 ? '1 year' : `${years} years`;
 }
 
 /**
@@ -57,7 +57,7 @@ export function formatRetentionFromExpiry(expires, now = new Date()) {
  */
 export function getDefaultStorageRetention(item) {
   if (item.name.startsWith('session:')) {
-    return 'Sessie';
+    return 'Session';
   }
   return 'Permanent (browser)';
 }

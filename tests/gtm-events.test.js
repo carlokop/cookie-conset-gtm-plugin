@@ -93,6 +93,6 @@ describe('gtm dataLayer integration', () => {
 
     expect(config.texts.title).toBe('Custom title');
     expect(config.texts.categories.analytics.title).toBe('Custom analytics');
-    expect(config.texts.categories.functional.title).toBe('Noodzakelijk');
+    expect(config.texts.categories.functional.title).toBe('Necessary');
   });
 });

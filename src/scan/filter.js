@@ -81,8 +81,8 @@ function hasExternalUrl(item) {
 }
 
 /**
- * Exporteert cookies + echte third-party trackers.
- * Sluit storage, consent/chat/review scripts en eigen site-code uit.
+ * Exports cookies and real third-party trackers.
+ * Excludes storage, consent/chat/review scripts, and same-site code.
  *
  * @param {RawScanItem[]} items
  * @param {string} [pageUrl]

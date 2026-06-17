@@ -6,7 +6,7 @@ const outPath = resolve(import.meta.dirname, '../dist/gtm-consent-bridge.html');
 const html = `<!--
   GTM Custom HTML tag — bridge bootstrap (ES5).
   Trigger: Consent Initialization - All Pages
-  Plaats deze tag BOVEN de Cookie Plugin Consent API template-tag.
+  Place this tag ABOVE the Cookie Plugin Consent API template tag.
 -->
 <script>
 (function(w) {

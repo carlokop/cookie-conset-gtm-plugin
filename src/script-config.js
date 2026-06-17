@@ -1,5 +1,5 @@
 /**
- * Leest configuratie uit data-attributen op het script-element.
+ * Reads configuration from data attributes on the script element.
  * @param {HTMLScriptElement | null} [script]
  * @returns {Partial<import('./config.js').DEFAULT_CONFIG>}
  */

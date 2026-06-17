@@ -6,7 +6,7 @@ describe('scan patterns lookup', () => {
     expect(lookupItem({ type: 'cookie', name: '_ga' })).toEqual({
       category: 'analytics',
       provider: 'Google Analytics',
-      retention: '2 jaar',
+      retention: '2 years',
     });
   });
 
@@ -14,7 +14,7 @@ describe('scan patterns lookup', () => {
     expect(lookupItem({ type: 'cookie', name: '_fbp' })).toEqual({
       category: 'marketing',
       provider: 'Meta',
-      retention: '3 maanden',
+      retention: '3 months',
     });
   });
 
@@ -33,7 +33,7 @@ describe('scan patterns lookup', () => {
   });
 
   it('returns unclassified for unknown items', () => {
-    expect(lookupItem({ type: 'cookie', name: 'mijn_eigen_cookie' })).toEqual({
+    expect(lookupItem({ type: 'cookie', name: 'my_custom_cookie' })).toEqual({
       category: 'unclassified',
       provider: '',
       retention: '',

@@ -13,12 +13,12 @@
 /** @type {ScanPattern[]} */
 export const PATTERNS = [
   // Functional cookies
-  { match: /^cp_cookie_consent$/, type: 'cookie', category: 'functional', provider: 'Cookie Plugin', retention: '180 dagen' },
-  { match: /^cookiefirst-consent$/, type: ['cookie', 'storage'], category: 'functional', provider: 'CookieFirst', retention: '1 jaar' },
-  { match: /^cookiefirst-id$/, type: 'storage', category: 'functional', provider: 'CookieFirst', retention: '1 jaar' },
+  { match: /^cp_cookie_consent$/, type: 'cookie', category: 'functional', provider: 'Cookie Plugin', retention: '180 days' },
+  { match: /^cookiefirst-consent$/, type: ['cookie', 'storage'], category: 'functional', provider: 'CookieFirst', retention: '1 year' },
+  { match: /^cookiefirst-id$/, type: 'storage', category: 'functional', provider: 'CookieFirst', retention: '1 year' },
   { match: /cookiefirst\.com/, type: ['script', 'resource'], category: 'functional', provider: 'CookieFirst' },
   { match: /crisp-client\/trigger/, type: 'storage', category: 'marketing', provider: 'Crisp' },
-  { match: /^crisp-client/, type: ['cookie', 'storage'], category: 'functional', provider: 'Crisp', retention: '6 maanden' },
+  { match: /^crisp-client/, type: ['cookie', 'storage'], category: 'functional', provider: 'Crisp', retention: '6 months' },
   { match: /crisp\.chat/, type: ['script', 'resource'], category: 'functional', provider: 'Crisp' },
   { match: /^session:is_eu$/, type: 'storage', category: 'functional', provider: 'Crisp' },
   { match: /trustpilot\.com/, type: ['script', 'resource'], category: 'functional', provider: 'Trustpilot' },
@@ -39,11 +39,11 @@ export const PATTERNS = [
   { match: /^ASP\.NET_SessionId$/, type: 'cookie', category: 'functional', provider: 'ASP.NET' },
 
   // Analytics cookies
-  { match: /^_ga$/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '2 jaar' },
-  { match: /^_ga_/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '2 jaar' },
-  { match: /^_gid$/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '1 dag' },
-  { match: /^_gat/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '1 minuut' },
-  { match: /^_gcl_au$/, type: 'cookie', category: 'marketing', provider: 'Google Ads', retention: '3 maanden' },
+  { match: /^_ga$/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '2 years' },
+  { match: /^_ga_/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '2 years' },
+  { match: /^_gid$/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '1 day' },
+  { match: /^_gat/, type: 'cookie', category: 'analytics', provider: 'Google Analytics', retention: '1 minute' },
+  { match: /^_gcl_au$/, type: 'cookie', category: 'marketing', provider: 'Google Ads', retention: '3 months' },
   { match: /^_gcl_ls$/, type: 'storage', category: 'marketing', provider: 'Google Ads' },
   { match: /^AMP_/, type: 'cookie', category: 'analytics', provider: 'Google AMP' },
   { match: /^_hj/, type: 'cookie', category: 'analytics', provider: 'Hotjar' },
@@ -57,12 +57,12 @@ export const PATTERNS = [
   { match: /^__hssrc$/, type: 'cookie', category: 'analytics', provider: 'HubSpot' },
   { match: /^pk_id/, type: 'cookie', category: 'analytics', provider: 'Matomo' },
   { match: /^pk_ses/, type: 'cookie', category: 'analytics', provider: 'Matomo' },
-  { match: /^_pin_unauth$/, type: 'cookie', category: 'marketing', provider: 'Pinterest', retention: '1 jaar' },
-  { match: /^_uetsid/, type: ['cookie', 'storage'], category: 'marketing', provider: 'Microsoft Advertising', retention: '1 dag' },
-  { match: /^_uetvid/, type: ['cookie', 'storage'], category: 'marketing', provider: 'Microsoft Advertising', retention: '13 maanden' },
+  { match: /^_pin_unauth$/, type: 'cookie', category: 'marketing', provider: 'Pinterest', retention: '1 year' },
+  { match: /^_uetsid/, type: ['cookie', 'storage'], category: 'marketing', provider: 'Microsoft Advertising', retention: '1 day' },
+  { match: /^_uetvid/, type: ['cookie', 'storage'], category: 'marketing', provider: 'Microsoft Advertising', retention: '13 months' },
 
   // Marketing cookies
-  { match: /^_fbp$/, type: 'cookie', category: 'marketing', provider: 'Meta', retention: '3 maanden' },
+  { match: /^_fbp$/, type: 'cookie', category: 'marketing', provider: 'Meta', retention: '3 months' },
   { match: /^_fbc$/, type: 'cookie', category: 'marketing', provider: 'Meta' },
   { match: /^fr$/, type: 'cookie', category: 'marketing', provider: 'Meta' },
   { match: /^IDE$/, type: 'cookie', category: 'marketing', provider: 'Google DoubleClick' },
