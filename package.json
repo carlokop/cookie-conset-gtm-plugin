@@ -1,0 +1,17 @@
+{
+  "name": "cookieplugin",
+  "version": "1.0.0",
+  "description": "Cookie consent plugin with Google Consent Mode v2 and GTM dataLayer support",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "node scripts/build.js --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "jsdom": "^26.0.0",
+    "vitest": "^3.0.0"
+  }
+}

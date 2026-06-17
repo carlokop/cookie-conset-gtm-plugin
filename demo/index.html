@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookie Consent Plugin Demo</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 40px;
+        line-height: 1.5;
+      }
+
+      pre {
+        background: #f4f4f4;
+        padding: 16px;
+        border-radius: 8px;
+        overflow: auto;
+      }
+
+      button {
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Cookie Consent Plugin Demo</h1>
+    <p>
+      Open deze pagina zonder consent cookie om de banner te zien. Gebruik de knoppen
+      hieronder om consent opnieuw te testen.
+    </p>
+
+    <button type="button" id="clear-consent">Consent cookie wissen</button>
+    <button type="button" id="open-preferences">Voorkeuren openen</button>
+    <button type="button" id="show-consent">Huidige consent tonen</button>
+
+    <h2>DataLayer</h2>
+    <pre id="datalayer-output">[]</pre>
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.CookiePluginConfig = {
+        consentVersion: 1,
+      };
+
+      const originalPush = window.dataLayer.push.bind(window.dataLayer);
+      window.dataLayer.push = function (...args) {
+        const result = originalPush(...args);
+        renderDataLayer();
+        return result;
+      };
+
+      function renderDataLayer() {
+        document.getElementById('datalayer-output').textContent = JSON.stringify(
+          window.dataLayer,
+          null,
+          2
+        );
+      }
+
+      document.getElementById('clear-consent').addEventListener('click', () => {
+        document.cookie = 'cp_cookie_consent=; Max-Age=0; Path=/';
+        location.reload();
+      });
+
+      document.getElementById('open-preferences').addEventListener('click', () => {
+        window.CookiePlugin?.openPreferences();
+      });
+
+      document.getElementById('show-consent').addEventListener('click', () => {
+        alert(JSON.stringify(window.CookiePlugin?.getConsent(), null, 2));
+      });
+    </script>
+    <script
+      src="../dist/cookie-consent.min.js"
+      data-privacy-policy-url="/privacybeleid"
+    ></script>
+    <script>
+      renderDataLayer();
+    </script>
+  </body>
+</html>
